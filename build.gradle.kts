@@ -37,3 +37,7 @@ tasks.withType<Test> {
 tasks.withType<BootJar> {
     archiveFileName.set("${project.name}.jar")
 }
+
+tasks.named<Jar>("jar") {
+    enabled = false
+}
