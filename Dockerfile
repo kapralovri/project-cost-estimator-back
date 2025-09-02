@@ -35,10 +35,6 @@ RUN addgroup -g 1001 -S appgroup && \
 # Копирование собранного JAR файла из первого этапа
 COPY --from=build /app/build/libs/*.jar app.jar
 
-# Создание директории для данных H2
-RUN mkdir -p /app/data && \
-    chown -R appuser:appgroup /app
-
 # Переключение на непривилегированного пользователя
 USER appuser
 

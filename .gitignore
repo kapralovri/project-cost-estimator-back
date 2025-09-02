@@ -59,3 +59,8 @@ application-dev.yml
 
 # Docker
 .dockerignore
+
+# Environment variables
+.env
+.env.local
+.env.*.local
