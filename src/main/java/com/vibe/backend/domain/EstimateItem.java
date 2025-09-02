@@ -1,10 +1,16 @@
 package com.vibe.backend.domain;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "estimate_items")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class EstimateItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,18 +31,6 @@ public class EstimateItem {
 
     @Column(name = "cost", nullable = false, precision = 19, scale = 2)
     private BigDecimal cost;
-
-    public Long getId() { return id; }
-    public Estimate getEstimate() { return estimate; }
-    public void setEstimate(Estimate estimate) { this.estimate = estimate; }
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
-    public BigDecimal getHours() { return hours; }
-    public void setHours(BigDecimal hours) { this.hours = hours; }
-    public BigDecimal getRate() { return rate; }
-    public void setRate(BigDecimal rate) { this.rate = rate; }
-    public BigDecimal getCost() { return cost; }
-    public void setCost(BigDecimal cost) { this.cost = cost; }
 }
 
 

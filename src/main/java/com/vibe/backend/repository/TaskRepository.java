@@ -8,6 +8,7 @@ import java.util.List;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
+    List<Task> findByEstimateId(Long estimateId);
     List<Task> findByEstimateIdOrderBySortOrderAsc(Long estimateId);
     List<Task> findByEstimateIdAndStatusOrderBySortOrderAsc(Long estimateId, String status);
     List<Task> findByEstimateIdAndCategoryOrderBySortOrderAsc(Long estimateId, String category);

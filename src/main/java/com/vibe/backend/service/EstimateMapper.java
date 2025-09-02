@@ -37,6 +37,18 @@ public class EstimateMapper {
         dto.setParameters(parameters);
         
         List<TaskDto> tasks = estimate.getTasks().stream()
+                .sorted((t1, t2) -> {
+                    // Сначала по этапу (stageName)
+                    int stageCompare = t1.getStageName().compareTo(t2.getStageName());
+                    if (stageCompare != 0) return stageCompare;
+                    
+                    // Затем по названию задачи (taskName)
+                    int nameCompare = t1.getTaskName().compareTo(t2.getTaskName());
+                    if (nameCompare != 0) return nameCompare;
+                    
+                    // Наконец по ID для стабильной сортировки
+                    return Long.compare(t1.getId(), t2.getId());
+                })
                 .map(EstimateMapper::toDto)
                 .collect(Collectors.toList());
         dto.setTasks(tasks);
@@ -74,8 +86,8 @@ public class EstimateMapper {
         TaskDto dto = new TaskDto();
         dto.setId(task.getId());
         dto.setEstimateId(task.getEstimate().getId());
-        dto.setName(task.getName());
-        dto.setDescription(task.getDescription());
+        dto.setTaskName(task.getTaskName());
+        dto.setStageName(task.getStageName());
         dto.setCategory(task.getCategory());
         dto.setComplexity(task.getComplexity());
         dto.setEstimatedHours(task.getEstimatedHours());
@@ -91,8 +103,9 @@ public class EstimateMapper {
         dto.setCreatedAt(task.getCreatedAt());
         dto.setUpdatedAt(task.getUpdatedAt());
         
-        // Преобразуем оценки задач
+        // Преобразуем оценки задач с сортировкой по роли
         List<TaskEstimateDto> estimateDtos = task.getEstimates().stream()
+                .sorted((e1, e2) -> e1.getRole().compareTo(e2.getRole()))
                 .map(EstimateMapper::toDto)
                 .collect(Collectors.toList());
         dto.setEstimates(estimateDtos);

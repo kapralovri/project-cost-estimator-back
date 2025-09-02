@@ -178,8 +178,8 @@ public class EstimateService {
         Estimate estimate = getOrThrow(estimateId);
         Task task = new Task();
         task.setEstimate(estimate);
-        task.setName(dto.getName());
-        task.setDescription(dto.getDescription());
+        task.setTaskName(dto.getTaskName());
+        task.setStageName(dto.getStageName());
         task.setCategory(dto.getCategory() != null ? dto.getCategory() : "development");
         task.setComplexity(dto.getComplexity() != null ? dto.getComplexity() : "medium");
         task.setEstimatedHours(dto.getEstimatedHours() != null ? dto.getEstimatedHours() : BigDecimal.ZERO);
@@ -261,11 +261,11 @@ public class EstimateService {
                 .orElseThrow(() -> new IllegalArgumentException("Task not found: " + taskId));
         
         // Обновляем поля задачи
-        if (dto.getName() != null) {
-            task.setName(dto.getName());
+        if (dto.getTaskName() != null) {
+            task.setTaskName(dto.getTaskName());
         }
-        if (dto.getDescription() != null) {
-            task.setDescription(dto.getDescription());
+        if (dto.getStageName() != null) {
+            task.setStageName(dto.getStageName());
         }
         if (dto.getCategory() != null) {
             task.setCategory(dto.getCategory());

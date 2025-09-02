@@ -1,6 +1,9 @@
 package com.vibe.backend.domain;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -8,6 +11,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "estimates")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Estimate {
 
     @Id
@@ -58,28 +64,6 @@ public class Estimate {
     void onUpdate() {
         updatedAt = OffsetDateTime.now();
     }
-
-    public Long getId() { return id; }
-    public String getProjectName() { return projectName; }
-    public void setProjectName(String projectName) { this.projectName = projectName; }
-    public String getClient() { return client; }
-    public void setClient(String client) { this.client = client; }
-    public String getCurrency() { return currency; }
-    public void setCurrency(String currency) { this.currency = currency; }
-    public BigDecimal getTotalCost() { return totalCost; }
-    public void setTotalCost(BigDecimal totalCost) { this.totalCost = totalCost; }
-    public String getQualityLevel() { return qualityLevel; }
-    public void setQualityLevel(String qualityLevel) { this.qualityLevel = qualityLevel; }
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
-    public OffsetDateTime getCreatedAt() { return createdAt; }
-    public OffsetDateTime getUpdatedAt() { return updatedAt; }
-    public List<EstimateItem> getItems() { return items; }
-    public void setItems(List<EstimateItem> items) { this.items = items; }
-    public List<Parameter> getParameters() { return parameters; }
-    public void setParameters(List<Parameter> parameters) { this.parameters = parameters; }
-    public List<Task> getTasks() { return tasks; }
-    public void setTasks(List<Task> tasks) { this.tasks = tasks; }
 }
 
 
