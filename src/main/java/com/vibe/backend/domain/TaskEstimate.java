@@ -38,3 +38,4 @@ public class TaskEstimate {
     public BigDecimal getMax() { return max; }
     public void setMax(BigDecimal max) { this.max = max; }
 }
+

@@ -13,3 +13,4 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByEstimateIdAndCategoryOrderBySortOrderAsc(Long estimateId, String category);
     void deleteByEstimateId(Long estimateId);
 }
+

@@ -11,3 +11,4 @@ public interface ParameterRepository extends JpaRepository<Parameter, Long> {
     List<Parameter> findByEstimateIdOrderBySortOrderAsc(Long estimateId);
     void deleteByEstimateId(Long estimateId);
 }
+

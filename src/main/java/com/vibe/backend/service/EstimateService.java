@@ -220,6 +220,92 @@ public class EstimateService {
         taskRepository.deleteById(taskId);
         estimate.getTasks().removeIf(t -> t.getId().equals(taskId));
     }
+
+    public TaskEstimate updateTaskEstimate(Long estimateId, Long taskId, String role, TaskEstimateDto dto) {
+        // Проверяем что оценка существует
+        Estimate estimate = getOrThrow(estimateId);
+        Task task = estimate.getTasks().stream()
+                .filter(t -> t.getId().equals(taskId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Task not found: " + taskId));
+        
+        // Ищем существующую оценку или создаем новую
+        TaskEstimate taskEstimate = taskEstimateRepository.findByTaskIdAndRole(taskId, role)
+                .orElseGet(() -> {
+                    TaskEstimate newEstimate = new TaskEstimate();
+                    newEstimate.setTask(task);
+                    newEstimate.setRole(role);
+                    return newEstimate;
+                });
+        
+        // Обновляем значения
+        if (dto.getMin() != null) {
+            taskEstimate.setMin(dto.getMin());
+        }
+        if (dto.getReal() != null) {
+            taskEstimate.setReal(dto.getReal());
+        }
+        if (dto.getMax() != null) {
+            taskEstimate.setMax(dto.getMax());
+        }
+        
+        return taskEstimateRepository.save(taskEstimate);
+    }
+
+    public Task updateTask(Long estimateId, Long taskId, TaskDto dto) {
+        // Проверяем что задача существует
+        Estimate estimate = getOrThrow(estimateId);
+        Task task = estimate.getTasks().stream()
+                .filter(t -> t.getId().equals(taskId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Task not found: " + taskId));
+        
+        // Обновляем поля задачи
+        if (dto.getName() != null) {
+            task.setName(dto.getName());
+        }
+        if (dto.getDescription() != null) {
+            task.setDescription(dto.getDescription());
+        }
+        if (dto.getCategory() != null) {
+            task.setCategory(dto.getCategory());
+        }
+        if (dto.getComplexity() != null) {
+            task.setComplexity(dto.getComplexity());
+        }
+        if (dto.getStatus() != null) {
+            task.setStatus(dto.getStatus());
+        }
+        if (dto.getPriority() != null) {
+            task.setPriority(dto.getPriority());
+        }
+        if (dto.getSortOrder() != null) {
+            task.setSortOrder(dto.getSortOrder());
+        }
+        
+        // Обновляем оценки задач если пришли
+        if (dto.getEstimates() != null) {
+            // Удаляем старые оценки
+            taskEstimateRepository.deleteByTaskId(taskId);
+            
+            // Очищаем коллекцию оценок в задаче
+            task.getEstimates().clear();
+            
+            // Создаем новые оценки
+            for (TaskEstimateDto estimateDto : dto.getEstimates()) {
+                TaskEstimate taskEstimate = new TaskEstimate();
+                taskEstimate.setTask(task);
+                taskEstimate.setRole(estimateDto.getRole());
+                taskEstimate.setMin(estimateDto.getMin() != null ? estimateDto.getMin() : BigDecimal.ZERO);
+                taskEstimate.setReal(estimateDto.getReal() != null ? estimateDto.getReal() : BigDecimal.ZERO);
+                taskEstimate.setMax(estimateDto.getMax() != null ? estimateDto.getMax() : BigDecimal.ZERO);
+                TaskEstimate savedEstimate = taskEstimateRepository.save(taskEstimate);
+                task.getEstimates().add(savedEstimate);
+            }
+        }
+        
+        return taskRepository.save(task);
+    }
 }
 
 

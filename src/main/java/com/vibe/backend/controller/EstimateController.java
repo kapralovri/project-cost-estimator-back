@@ -4,12 +4,14 @@ import com.vibe.backend.domain.Estimate;
 import com.vibe.backend.domain.EstimateItem;
 import com.vibe.backend.domain.Parameter;
 import com.vibe.backend.domain.Task;
+import com.vibe.backend.domain.TaskEstimate;
 import com.vibe.backend.service.EstimateMapper;
 import com.vibe.backend.service.EstimateService;
 import com.vibe.backend.controller.dto.EstimateDto;
 import com.vibe.backend.controller.dto.EstimateItemDto;
 import com.vibe.backend.controller.dto.ParameterDto;
 import com.vibe.backend.controller.dto.TaskDto;
+import com.vibe.backend.controller.dto.TaskEstimateDto;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -92,6 +94,20 @@ public class EstimateController {
     @DeleteMapping("/{estimateId}/tasks/{taskId}")
     public void removeTask(@PathVariable Long estimateId, @PathVariable Long taskId) {
         estimateService.removeTask(estimateId, taskId);
+    }
+
+    @PutMapping("/{estimateId}/tasks/{taskId}/estimates/{role}")
+    public TaskEstimateDto updateTaskEstimate(@PathVariable Long estimateId, @PathVariable Long taskId, 
+                                            @PathVariable String role, @RequestBody TaskEstimateDto dto) {
+        TaskEstimate updated = estimateService.updateTaskEstimate(estimateId, taskId, role, dto);
+        return EstimateMapper.toDto(updated);
+    }
+
+    @PutMapping("/{estimateId}/tasks/{taskId}")
+    public TaskDto updateTask(@PathVariable Long estimateId, @PathVariable Long taskId, 
+                             @RequestBody TaskDto dto) {
+        Task updated = estimateService.updateTask(estimateId, taskId, dto);
+        return EstimateMapper.toDto(updated);
     }
 }
 
